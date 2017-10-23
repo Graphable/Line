@@ -1,9 +1,9 @@
 // Graphable
 var Graphable = (type, width, height, margin, data) => {
 
-	if (typeof type == 'undefined' || typeof width == 'undefined' || typeof height == 'undefined' || typeof margin == 'undefined' || typeof data == 'undefined') {
-		return;
-	}
+	// if (typeof type == 'undefined' || typeof width == 'undefined' || typeof height == 'undefined' || typeof margin == 'undefined' || typeof data == 'undefined') {
+	// 	return;
+	// }
 
 	function pointSibling (index, position) {
 		position = position.toUpperCase();
@@ -13,8 +13,8 @@ var Graphable = (type, width, height, margin, data) => {
 			prev = point[index - 1],
 			next = point[index + 1];
 
-			prev = typeof prev == 'undefined' ? prev : { X: 0, Y: 0 };
-			next = typeof next == 'undefined' ? next : { X: 0, Y: 0 };
+			prev = typeof prev != 'undefined' ? prev : { X: 0, Y: 0 };
+			next = typeof next != 'undefined' ? next : { X: 0, Y: 0 };
 
 			if (position == 'PREV') {
 				return prev;
@@ -23,12 +23,6 @@ var Graphable = (type, width, height, margin, data) => {
 				return next;
 			}
 		}
-		// else {
-		// 	return {
-		// 		X: ``,
-		// 		Y: ``
-		// 	}
-		// }
 	}
 
 	function pointHandle (prev, current, next, interval) {
@@ -49,8 +43,8 @@ var Graphable = (type, width, height, margin, data) => {
 					controlPointY = current.Y + Math.sin(tangentAngle) * interval;
 
 		return {
-			X: Math.round(controlPointX),
-			Y: Math.round(controlPointY)
+			X: controlPointX,
+			Y: controlPointY
 		}
 	}
 
@@ -75,7 +69,8 @@ var Graphable = (type, width, height, margin, data) => {
 
 	// Update Interval X and Y
 	intervalX = data.length;
-	intervalY = Math.round(dataHighest - dataLowest);
+	// intervalY = Math.round(dataHighest - dataLowest);
+	intervalY = dataHighest - dataLowest;
 
 	// Update Space X and Y
 	spaceX = pathW / data.length;
@@ -85,7 +80,8 @@ var Graphable = (type, width, height, margin, data) => {
 			startX = start,
       end = `z`,
       comma = `,`,
-      path = ``;
+      path = ``,
+			pathCurve = ``;
 
   for (var i = 0; i < data.length; i++) {
     var index = i + 1,
@@ -127,69 +123,53 @@ var Graphable = (type, width, height, margin, data) => {
 		path += `L ${pathStart} ${point[i].Y}${comma} `;
 		path += last ? `L ${pathX} ${point[i].Y}, V${pathY} H${start} z` : ``;
 
+		console.log(spaceX)
+
 		var prev = pointSibling(i, 'prev'),
 				current = point[i],
 				next = pointSibling(i, 'next'),
 				interval = spaceX / 2;
 
-		console.log(prev, current, next, interval)
-		/*
-		if (first == false || last == false) {
-			var handle = pointHandle(
-				pointSibling(i, 'prev'),
-				point[i],
-				pointSibling(i, 'next'),
-				spaceX / 2
-			)
-
-			console.log(handle)
+		// console.log(prev, current, next, interval)
+		if (typeof prev == 'undefined') {
+			prev = {
+				X: start,
+				Y: point[0].Y
+			}
 		}
-		*/
+		else if (typeof next == 'undefined') {
+			next = {
+				X: pathX,
+				Y: point[i].Y
+			}
+		}
+
+		var handle = pointHandle(
+			{ X: prev.X, Y: prev.Y},
+			{ X: pathStart, Y: point[i].Y },
+			{ X: last ? pathX + spaceX : next.X, Y: next.Y },
+			spaceX / 2
+		)
+
+
+		if (first) {
+			pathCurve += `M${start} ${point[0].Y} L ${pathStart}, ${point[i].Y} `;
+		}
+		else {
+			pathCurve += `S${handle.X} ${handle.Y} ${pathStart} ${point[i].Y} `;
+		}
+		pathCurve += last ? `L ${pathX} ${point[i].Y} V${pathY} H${start} z` : ``;
 
 	}
 
+	console.log(`Points = ${JSON.stringify(point)}`)
 
-	// console.log(`Data = ${JSON.stringify(generate(DATA))}`);
-	console.log(`Path = ${path}`);
-	console.log(`Lowest = ${dataLowest}`);
-	console.log(`Highest = ${dataHighest}`);
-	console.log(`Interval X = ${intervalX}`);
-	console.log(`Interval Y = ${intervalY}`);
-	console.log(`Space X = ${spaceX}`);
-	console.log(`Space Y = ${spaceY}`);
-	console.log(`Point = ${JSON.stringify(point)}`);
   return {
 		path,
+		pathCurve,
 		canvasW,
 		canvasH,
 		pathW,
 		pathH
 	}
 }
-
-
-
-
-// var DATA = [1, 3, 5, 7, 9, 11, 13, 15, 17, 19];
-var DATA = [1, 10, -5, 20, 8, 25, 60];
-
-var lineGraph = Graphable('line', 600, 300, 20, DATA);
-
-
-// console.log(`Data = ${JSON.stringify(generate(DATA))}`);
-// console.log(`Path = ${JSON.stringify(generate(DATA))}`);
-// console.log(`Lowest = ${dataLowest}`);
-// console.log(`Highest = ${dataHighest}`);
-// console.log(`Interval X = ${intervalX}`);
-// console.log(`Interval Y = ${intervalY}`);
-// console.log(`Space X = ${spaceX}`);
-// console.log(`Space Y = ${spaceY}`);
-// console.log(`Position = ${JSON.stringify(point)}`);
-
-var div = document.querySelector("#root"),
-		svgPath = `<path d="${lineGraph.path}" />`;
-
-if (DATA.length) {
-  var svg = `<svg width="${lineGraph.canvasW}px" height="${lineGraph.canvasH}px">${svgPath}</svg>`;
-}
-div.innerHTML = svg;

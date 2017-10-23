@@ -1,8 +1,11 @@
-svg {
-  fill: '#dd2244';
-  stroke: '#fff'
+html {
+  font-size: 62.5%;
 }
-
+body {
+  font-size: 100%;
+  color: #666;
+  font-family: sans-serif;
+}
 html,
 body {
   width: 100%;
@@ -11,11 +14,70 @@ body {
   padding: 0;
 }
 
-#root {
-  padding: 3.2rem;
+p {
+  font-size: 1.4rem;
+}
+
+a {
+  color: #222;
+}
+
+h1,
+h2 {
+  padding: 0;
+  margin: 2.4rem 0;
+  line-height: 2.4rem;
+  font-size: 3.2rem;
+  text-transform: uppercase;
+  color: #111;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+
+header,
+main,
+footer {
+}
+
+.container {
+  margin: 0;
+  padding: 0 3.2rem;
 }
 svg {
-  background: #d24;
+  background: #666;
   stroke: #fff;
   stroke-width: 2px;
+}
+
+form {
+  font-size: 100%;
+  overflow: hidden;
+  margin-bottom: 1.6rem;
+}
+
+input,
+button {
+  font-size: 1.6rem;
+  line-height: 2.4rem;
+  padding: 0.8rem 1.6rem;
+  border: 0.2rem solid #ddd;
+  color: inherit;
+  float: left;
+}
+input {
+  width: 80%;
+}
+button,
+input[type="submit"] {
+  background: #444;
+  border-color: #444;
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 1.4rem;
+  width: 20%;
+  margin: 0;
 }

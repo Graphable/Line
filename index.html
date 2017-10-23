@@ -8,26 +8,60 @@
 	<link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body>
-	<div id="root"></div>
-	<!-- <svg width="400" height="200">
-    <path fill="none"
-          stroke="#fff"
-          stroke-width="2"
-          d="M0,
-					0 S0,
-					20 256,
-					60 256,
-					140 220,
-					220 280,
-					300 180,
-					380 228,
-					460 160,
-					540 20,
-					580 20,
-					V280 H20 z,
-					20" />
-</svg> -->
-</svg>
+	<!-- HEADER -->
+	<header>
+		<div class="container">
+			<h1>Graphable</h1>
+		</div>
+	</header>
+	<!-- MAIN -->
+	<main>
+		<div class="container">
+			<form>
+				<input type="text" id="input" autocomplete="off" value="12, 8.0, 12.0, 12.4, 12.4, 6.0, 12.5, 12.5, 10.0, 12.5, 12.5, 16.0">
+				<button id="submit">Generate</button>
+			</form>
+			<div class="content"></div>
+		</div>
+	</main>
+	<!-- FOOTER -->
+	<footer>
+		<div class="container">
+			<p>Powered by <a href="http://graphable.github.io">Graphable</a></p>
+		</div>
+	</footer>
+
 	<script src="script.js"></script>
+	<script>
+		var form = document.querySelector('form'),
+				input = document.getElementById('input'),
+				submit = document.getElementById('submit'),
+				value = input.value.split(','),
+				lineGraph,
+				svg,
+				svgPath;
+
+		function render() {
+			lineGraph = Graphable('line', 600, 180, [20, 0], value);
+			value = input.value.split(',');
+			content = document.querySelector(".content");
+			svgPath = `
+					<path stroke="#999" fill="#222" d="${lineGraph.path}" />
+					<path d="${lineGraph.pathCurve}" />`;
+
+			if (value.length) {
+				svg = `<svg width="${lineGraph.canvasW}px" height="${lineGraph.canvasH}px">${svgPath}</svg>`;
+			}
+			content.innerHTML = svg;
+		}
+
+		render();
+
+		submit.addEventListener('click', function(e) {
+			e.preventDefault();
+			render();
+		});
+
+	</script>
 </body>
 </html>
