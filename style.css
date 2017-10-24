@@ -51,6 +51,10 @@ svg {
   background: #666;
   stroke: #fff;
   stroke-width: 2px;
+  margin: 0;
+  float: none;
+  clear: both;
+  display: block;
 }
 
 form {

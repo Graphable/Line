@@ -27,7 +27,7 @@
 	<!-- FOOTER -->
 	<footer>
 		<div class="container">
-			<p>Powered by <a href="http://graphable.github.io">Graphable</a></p>
+			<p>Powered by <a href="https://github.com/graphable/linegraph/" target="_blank">Graphable</a>, <a href="https://github.com/farzad7" target="_blank">Farzad</a>.</p>
 		</div>
 	</footer>
 
@@ -42,15 +42,19 @@
 				svgPath;
 
 		function render() {
-			lineGraph = Graphable('line', 600, 180, [20, 0], value);
+			lineGraph = Graphable('line', 640, 240, 0, value);
 			value = input.value.split(',');
 			content = document.querySelector(".content");
-			svgPath = `
-					<path stroke="#999" fill="#222" d="${lineGraph.path}" />
-					<path d="${lineGraph.pathCurve}" />`;
+			svgPath = [
+				`<path d="${lineGraph.path}" />`,
+				`<path d="${lineGraph.pathCurve}" />`
+			];
 
 			if (value.length) {
-				svg = `<svg width="${lineGraph.canvasW}px" height="${lineGraph.canvasH}px">${svgPath}</svg>`;
+				svg = [
+					`<svg width="${lineGraph.canvasW}px" height="${lineGraph.canvasH}px">${svgPath[0]}</svg>`,
+					`<svg width="${lineGraph.canvasW}px" height="${lineGraph.canvasH}px">${svgPath[1]}</svg>`
+				];
 			}
 			content.innerHTML = svg;
 		}
