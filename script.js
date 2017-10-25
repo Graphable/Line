@@ -5,6 +5,12 @@ var Graphable = (type, width, height, canvasMargin, data) => {
 	// 	return;
 	// }
 
+	data = data.map((number) => {
+		return parseFloat(Math.round(number * 100) / 100).toFixed(3);
+	});
+
+	console.log(`Data = ${data}`)
+
 	function pointSibling (index, position) {
 		position = position.toUpperCase();
 		var prev,
@@ -22,6 +28,13 @@ var Graphable = (type, width, height, canvasMargin, data) => {
 			else if (position == 'NEXT') {
 				return next;
 			}
+		}
+	}
+
+	function round(number, decimalPlace) {
+		if (typeof number != 'undefined') {
+			decimalPlace = typeof decimalPlace == 'undefined' ? 3 : decimalPlace;
+			return parseFloat(Math.round(number * 100) / 100).toFixed(decimalPlace);
 		}
 	}
 
@@ -70,23 +83,35 @@ var Graphable = (type, width, height, canvasMargin, data) => {
 			pathCurve = ``;
 
 	// console.log(`Path Hight = ${pathH}`);
-	dataHighest = Math.max.apply(null, data);
-	dataLowest = Math.min.apply(null, data);
+	// parseFloat(Math.round(number * 100) / 100).toFixed(3);
+
+	// dataHighest = Math.max.apply(null, data);
+	dataHighest = round(Math.max.apply(null, data));
+	dataLowest = round(Math.min.apply(null, data));
+
+	console.log(`Data Highest = ${dataHighest}`)
+	console.log(`Data Lowest = ${dataLowest}`)
 
 	// Update Interval X and Y
 	intervalX = data.length;
-	intervalY = dataHighest - dataLowest + offsetY;
+	intervalY = round(dataHighest - dataLowest + offsetY);
+
+	// Update OffsetY
+	offsetY = intervalY <= 10 ? 0.5 : intervalY <= 20 ? 1 : 2;
 
 	// Update Space X and Y
 	spaceX = pathW / data.length;
-	spaceY = pathH / intervalY;
+	spaceY = round(pathH / intervalY);
+
+	console.log(`Space X = ${spaceX}`)
+	console.log(`Space Y = ${spaceY}`)
 
 	// Update Path Padding
 	pathPadding = pathH - (intervalY - offsetY) * spaceY;
 
-	// console.log(`Offset Y = ${offsetY}`)
+	console.log(`Offset Y = ${offsetY}`)
 	// console.log(`Path Padding = ${pathPadding}`)
-	// console.log(`Interval Y = ${intervalY}`)
+	console.log(`Interval Y = ${intervalY}`)
 	// console.log(`Space Y = ${spaceY}`)
 	// console.log(`Height = ${pathH}`)
 
@@ -123,8 +148,7 @@ var Graphable = (type, width, height, canvasMargin, data) => {
 				pathStart = point[i].X - (spaceX / 2),
 				pathEnd = point[i].X + (spaceX / 2),
 				pathX = canvasW - canvasMargin[1],
-				pathY = canvasH - canvasMargin[2],
-				command = first ? 'M' : `L`;
+				pathY = canvasH - canvasMargin[2];
 
 		path += first ? `M${start} ${point[0].Y}, ` : ``;
 		path += `L ${pathStart} ${point[i].Y}, `;
@@ -133,8 +157,9 @@ var Graphable = (type, width, height, canvasMargin, data) => {
 		var prev = pointSibling(i, 'prev'),
 				current = point[i],
 				next = pointSibling(i, 'next'),
-				interval = spaceX / 2;
+				interval = round(spaceX / 2);
 
+		console.log(`Interval = ${interval}`)
 		// console.log(prev, current, next, interval)
 		if (typeof prev == 'undefined') {
 			prev = {
@@ -152,7 +177,7 @@ var Graphable = (type, width, height, canvasMargin, data) => {
 		var handle = pointHandle(
 			{ X: prev.X, Y: prev.Y},
 			{ X: pathStart, Y: point[i].Y },
-			{ X: last ? pathX : next.X, Y: next.Y },
+			{ X: last ? pathStart + pathX : next.X, Y: next.Y },
 			spaceX / 2
 		)
 

@@ -12,13 +12,15 @@
 	<header>
 		<div class="container">
 			<h1>Graphable</h1>
+			<h3>Line Graph</h3>
 		</div>
 	</header>
 	<!-- MAIN -->
 	<main>
 		<div class="container">
 			<form>
-				<input type="text" id="input" autocomplete="off" value="12, 8.0, 12.0, 12.4, 12.4, 6.0, 12.5, 12.5, 10.0, 12.5, 12.5, 16.0">
+				<!-- <input type="text" id="input" autocomplete="off" value="12.4, 12.4, 12.4, 12.4, 12.5, 12.5, 12.5, 12.5, 12.5, 12.5"> -->
+				<input type="text" id="input" autocomplete="off" value="8, 7, 3, 2, 1, 4, 9, 10.050, 11.1, 21.7765, 22.39">
 				<button id="submit">Generate</button>
 			</form>
 			<div class="content"></div>
@@ -27,7 +29,7 @@
 	<!-- FOOTER -->
 	<footer>
 		<div class="container">
-			<p>Powered by <a href="https://github.com/graphable/linegraph/" target="_blank">Graphable</a>, <a href="https://github.com/farzad7" target="_blank">Farzad</a>.</p>
+			<p>Powered by <a href="https://github.com/graphable/line/" target="_blank">Graphable</a>, <a href="https://github.com/farzad7" target="_blank">Farzad</a>.</p>
 		</div>
 	</footer>
 
@@ -42,7 +44,7 @@
 				svgPath;
 
 		function render() {
-			lineGraph = Graphable('line', 640, 240, 0, value);
+			lineGraph = Graphable('line', 640, 320, 0, value);
 			value = input.value.split(',');
 			content = document.querySelector(".content");
 			svgPath = [
