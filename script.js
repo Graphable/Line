@@ -1,10 +1,7 @@
 // Graphable
 var Graphable = (type, width, height, canvasMargin, data) => {
 
-	// if (typeof type == 'undefined' || typeof width == 'undefined' || typeof height == 'undefined' || typeof canvasMargin == 'undefined' || typeof data == 'undefined') {
-	// 	return;
-	// }
-
+	// Map Data
 	data = data.map((number) => {
 		return parseFloat(Math.round(number * 100) / 100).toFixed(3);
 	});
@@ -192,14 +189,13 @@ var Graphable = (type, width, height, canvasMargin, data) => {
 
 	}
 
-	// console.log(`Points = ${JSON.stringify(point)}`)
-
   return {
 		path,
 		pathCurve,
 		canvasW,
 		canvasH,
 		pathW,
-		pathH
+		pathH,
+		point
 	}
 }

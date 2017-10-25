@@ -41,7 +41,8 @@
 				value = input.value.split(','),
 				lineGraph,
 				svg,
-				svgPath;
+				svgPath,
+				svgPoint = new Array;
 
 		function render() {
 			lineGraph = Graphable('line', 640, 320, 0, value);
@@ -52,10 +53,28 @@
 				`<path d="${lineGraph.pathCurve}" />`
 			];
 
+			var columnWidth = lineGraph.canvasW / lineGraph.point.length;
+
+			console.log(lineGraph.path)
+			console.log(lineGraph.point)
+
+
+			for (var i = 0; i < lineGraph.point.length; i++) {
+				svgPoint.push(`<circle cx="${lineGraph.point[i].X - columnWidth / 2}" cy="${lineGraph.point[i].Y}" r="5" stroke="black" stroke-width="0" fill="#ccc" />`);
+			}
+
 			if (value.length) {
 				svg = [
-					`<svg width="${lineGraph.canvasW}px" height="${lineGraph.canvasH}px">${svgPath[0]}</svg>`,
-					`<svg width="${lineGraph.canvasW}px" height="${lineGraph.canvasH}px">${svgPath[1]}</svg>`
+					`<svg width="${lineGraph.canvasW}px" height="${lineGraph.canvasH}px">
+
+						${svgPath[0]}
+						${svgPoint}
+					</svg>`,
+					`<svg width="${lineGraph.canvasW}px" height="${lineGraph.canvasH}px">
+
+						${svgPath[1]}
+						${svgPoint}
+					</svg>`
 				];
 			}
 			content.innerHTML = svg;
