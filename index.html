@@ -38,26 +38,25 @@
 		var form = document.querySelector('form'),
 				input = document.getElementById('input'),
 				submit = document.getElementById('submit'),
+				content = document.querySelector(".content"),
 				value = input.value.split(','),
 				lineGraph,
 				svg,
 				svgPath,
-				svgPoint = new Array;
+				svgPoint;
 
 		function render() {
 			lineGraph = Graphable('line', 640, 320, 0, value);
 			value = input.value.split(',');
-			content = document.querySelector(".content");
+
+			var columnWidth = lineGraph.canvasW / lineGraph.point.length;
+
 			svgPath = [
 				`<path d="${lineGraph.path}" />`,
 				`<path d="${lineGraph.pathCurve}" />`
 			];
-
-			var columnWidth = lineGraph.canvasW / lineGraph.point.length;
-
-			console.log(lineGraph.path)
-			console.log(lineGraph.point)
-
+			// Clear the Array
+			svgPoint = [];
 
 			for (var i = 0; i < lineGraph.point.length; i++) {
 				svgPoint.push(`<circle cx="${lineGraph.point[i].X - columnWidth / 2}" cy="${lineGraph.point[i].Y}" r="5" stroke="black" stroke-width="0" fill="#ccc" />`);
